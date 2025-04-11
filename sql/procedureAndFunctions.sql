@@ -68,9 +68,9 @@ BEGIN
         
         IF v_producto.stock_actual < p_cantidades[v_index] THEN
             v_error_message := FORMAT(
-                'Error: Stock insuficiente para %s (ID: %). Stock actual: %, Cantidad solicitada: %',
-                v_producto.nombre, v_producto.producto_id, v_producto.stock_actual, p_cantidades[v_index]
-            );
+            'Error: Stock insuficiente para %s (ID: %s). Stock actual: %s, Cantidad solicitada: %s',
+            v_producto.nombre, v_producto.producto_id, v_producto.stock_actual, p_cantidades[v_index]
+        );
             RAISE EXCEPTION '%', v_error_message;
         END IF;
         
