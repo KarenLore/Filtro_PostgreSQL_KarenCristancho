@@ -11,7 +11,7 @@ Sistema de gestión para tiendas de tecnología que permite:
 
 ## 🔍 Modelo Entidad-Relación
 
-![Diagrama E-R](Database.png)
+![Diagrama E-R](./Images/modelo_er.png)
 
 ## 🛠 Instalación
 
