@@ -109,5 +109,3 @@ El sistema informa automáticamente mediante mensajes cuando ocurren:
 └── README.md
 ```
 ```
-
-¿Quieres que también te lo empaquete en un archivo `.md` listo para descargar?
