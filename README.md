@@ -1,25 +1,30 @@
-```markdown
 # 📋 Sistema de Gestión de Inventario TechZone
 
 ## 📌 Descripción del Proyecto
 
-Sistema de gestión para tiendas de tecnología que permite:
-- Control de inventario y stock
-- Gestión de proveedores y productos
-- Registro de ventas y clientes
-- Reportes analíticos
+**TechZone** es un sistema de gestión de inventario diseñado para tiendas de tecnología. Su propósito es brindar una solución eficiente para el control de productos, proveedores, ventas y clientes.
+
+Este sistema permite:
+
+- Controlar el inventario y el stock de productos.  
+- Gestionar proveedores y registrar nuevos productos.  
+- Registrar ventas asociadas a clientes y empleados.  
+- Generar reportes analíticos para la toma de decisiones.  
+- Detectar automáticamente errores como stock insuficiente o datos inconsistentes.
 
 ## 🔍 Modelo Entidad-Relación
 
 ![Diagrama E-R](./Images/modelo_er.png)
 
-## 🛠 Instalación
+## 🛠 Instrucciones de Instalación
 
-### Requisitos
-- PostgreSQL 12+
-- Acceso de superusuario
+### Requisitos Previos
 
-### Ejecución
+- PostgreSQL 12 o superior.  
+- Acceso a un usuario con privilegios de superusuario.
+
+### Pasos para Ejecutar
+
 ```bash
 # 1. Crear base de datos
 psql -U postgres -c "CREATE DATABASE filtro_techzone;"
@@ -30,59 +35,70 @@ psql -U postgres -d filtro_techzone -f insert.sql
 psql -U postgres -d filtro_techzone -f ProcedureAndFunctions.sql
 ```
 
-## 📂 Estructura de Archivos
+## 📂 Descripción de Archivos
 
-| Archivo                | Descripción                                                                 |
-|------------------------|-----------------------------------------------------------------------------|
-| `db.sql`               | Crea la estructura de la base de datos (tablas, relaciones, índices)        |
-| `insert.sql`           | Inserta datos iniciales (15+ registros por tabla)                          |
-| `queries.sql`          | 6 consultas analíticas requeridas                                          |
-| `ProcedureAndFunctions.sql` | Procedimiento para registrar ventas con validaciones de stock           |
+| Archivo                     | Descripción                                                                 |
+|----------------------------|-----------------------------------------------------------------------------|
+| `db.sql`                   | Crea la estructura de la base de datos (tablas, relaciones, índices).       |
+| `insert.sql`               | Inserta datos iniciales: clientes, productos, proveedores y empleados.      |
+| `queries.sql`              | Contiene 6 consultas analíticas útiles para el análisis de ventas y stock.  |
+| `ProcedureAndFunctions.sql`| Crea un procedimiento almacenado que valida stock y registra ventas.        |
 
 ## 💻 Uso del Sistema
 
-### Procedimiento de Venta
+### Registrar una Venta
+
 ```sql
--- Ejemplo: Registrar venta
 CALL registrar_venta(
-    1,                     -- ID cliente
-    ARRAY[1, 5, 7],        -- ID productos
-    ARRAY[1, 2, 1],        -- Cantidades
-    'vendedor1'            -- Usuario
+    1,                     -- ID del cliente
+    ARRAY[1, 5, 7],        -- IDs de productos comprados
+    ARRAY[1, 2, 1],        -- Cantidades correspondientes
+    'vendedor1'            -- Usuario que realiza la venta
 );
-
--- Casos de error
-CALL registrar_venta(999, ARRAY[1], ARRAY[1], 'vendedor1');  -- Cliente inexistente
-CALL registrar_venta(1, ARRAY[999], ARRAY[1], 'vendedor1');  -- Producto inexistente
 ```
 
-### Consultas Principales
+### Casos de Error
+
 ```sql
--- Productos con stock bajo (<5 unidades)
-SELECT * FROM productos WHERE calcular_stock(producto_id) < 5;
-
--- Top 5 productos más vendidos
-\i queries.sql  -- Ejecuta todas las consultas analíticas
+CALL registrar_venta(999, ARRAY[1], ARRAY[1], 'vendedor1'); -- Cliente inexistente
+CALL registrar_venta(1, ARRAY[999], ARRAY[1], 'vendedor1'); -- Producto inexistente
+CALL registrar_venta(1, ARRAY[1], ARRAY[999], 'vendedor1'); -- Stock insuficiente
 ```
 
-## 📊 Consultas Disponibles
+## 📊 Consultas Analíticas
 
-1. Productos con stock crítico
-2. Ventas por mes específico
-3. Cliente más frecuente
-4. Top 5 productos vendidos
-5. Ventas por rangos de fechas
-6. Clientes inactivos (6+ meses)
+Para ejecutar las consultas:
+
+```sql
+\i queries.sql
+```
+
+Consultas incluidas:
+
+1. Productos con stock crítico (menos de 5 unidades)  
+2. Ventas por mes específico  
+3. Cliente más frecuente  
+4. Top 5 productos más vendidos  
+5. Ventas por rangos de fechas  
+6. Clientes inactivos (más de 6 meses sin comprar)
+
+### Ejemplo individual
+
+```sql
+SELECT * FROM productos WHERE calcular_stock(producto_id) < 5;
+```
 
 ## 🚨 Manejo de Errores
 
-El sistema notificará mediante mensajes:
-- Clientes/productos inexistentes
-- Stock insuficiente
-- Inconsistencias en los datos
-- Errores en transacciones
+El sistema informa automáticamente mediante mensajes cuando ocurren:
 
-## 📌 Estructura del Repositorio
+- Clientes o productos inexistentes  
+- Stock insuficiente  
+- Inconsistencias en los datos  
+- Errores durante transacciones
+
+## 📁 Estructura del Repositorio
+
 ```
 .
 ├── db.sql
@@ -92,3 +108,6 @@ El sistema notificará mediante mensajes:
 ├── modelo_er.png
 └── README.md
 ```
+```
+
+¿Quieres que también te lo empaquete en un archivo `.md` listo para descargar?
